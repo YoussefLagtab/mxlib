@@ -26,10 +26,14 @@ typedef struct s_matrix
 # define F_UNSET(x, f) (x &= ~(1 << f))
 # define F_BUNSET(x, f) (x &= ~f)
 
-# define RANDOM 1
-# define ZERO 2
-# define NEW 4
-# define FREE 8
+# define NOTSET 1
+# define RANDOM 2
+# define ZERO 3
+# define NEW 8
+# define FREE 16
+# define COMP 32
+# define VERTICAL 64
+# define HORIZONTAL 128
 
 /*
 **	UTILITY MACROS
@@ -46,6 +50,7 @@ void		free_matrix(t_matrix *a);
 t_matrix	*copy_matrix(t_matrix *a);
 t_matrix	*add_matrix(t_matrix *a, t_matrix *b, int flag);
 t_matrix	*scale_matrix(t_matrix *a, long double scale, int flag);
+t_matrix	*append_matrix(t_matrix *a, t_matrix *b, int flag);
 
 
 #endif

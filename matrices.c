@@ -43,7 +43,7 @@ t_matrix	*copy_matrix(t_matrix *a)
 {
 	t_matrix *copy;
 
-	if (!a || !(copy = create_matrix(a->rows, a->cols, INT_MAX)))
+	if (!a || !(copy = create_matrix(a->rows, a->cols, NOTSET)))
 		return (NULL);
 	for (int i = 0; i < a->rows; i++)
 		for (int j = 0; j < a->cols; j++)
@@ -55,8 +55,9 @@ t_matrix	*add_matrix(t_matrix *a, t_matrix *b, int flag)
 	t_matrix *sum;
 
 	if (!a || !b || a->rows != b->rows || a->cols != b->cols)
-		return ;
-	sum = flag & NEW ? copy_matrix(a) : a;
+		return (NULL);
+	if (!(sum = flag & NEW ? copy_matrix(a) : a))
+		return (NULL);
 	for (int i = 0; i < sum->rows; i++)
 		for (int j = 0; j < sum->cols; j++)
 			sum[i][j] += b[i][j];
@@ -69,9 +70,8 @@ t_matrix	*scale_matrix(t_matrix *a, long double scale, int flag)
 {
 	t_matrix *scaled;
 
-	if (!a)
-		return ;
-	scaled = flag & NEW ? copy_matrix(a) : a;
+	if (!a || !(scaled = flag & NEW ? copy_matrix(a) : a))
+		return (NULL);
 	for (int i = 0; i < a->rows; i++)
 		for (int j = 0; j < a->cols; j++)
 			a[i][j] *= scale;	
@@ -80,7 +80,37 @@ t_matrix	*scale_matrix(t_matrix *a, long double scale, int flag)
 	return (scaled);
 }
 
-void	multiply_matrix(t_matrix *a, t_matrix *b, int flag)
+t_matrix	*multiply_matrix(t_matrix *a, t_matrix *b, int flag)
 {
+	if (!a || !b || a->rows != b->cols)
+		return (NULL);
+	if (flag & COMP)
+		return (multiply_matrix_composition(a, b));
+	else if (flag & )
+	
+}
 
+t_matrix	*append_matrix(t_matrix *a, t_matrix *b, int flag)
+{
+	t_matrix *appended;
+
+	if (!a || !b || (!(flag & VERTICAL) && !(flag & HORIZONTAL)) ||
+	flag & VERTICAL ? a->rows != b->rows : a->cols != b->cols ||
+	!(appended = create_matrix(
+		flag & VERTICAL ? a->rows + b->rows : a->rows,
+		flag & HORIZONTAL ? a->cols + b->cols : cols,
+		NOTSET)))
+		return (NULL);
+	for (int i = 0; i < appended->rows; i++)
+	{
+		for (int j = 0; j < appended->cols; j++)
+		{
+			appended[i][j] = i > a->rows ?
+						b[i - a->rows][j] :
+						j > a->cols ?
+							b[i][j - j->cols] :
+							a[i][j];
+		}
+	}
+	return (appended);
 }
