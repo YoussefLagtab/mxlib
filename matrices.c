@@ -5,15 +5,15 @@
  * values are initialized depending on flag value:
  * 	RANDOM: assign random values
  * 	ZERO: assign zero values
-*/
+ */
 
 t_matrix	*create_matrix(size_t rows, size_t cols, int flag)
 {
 	t_matrix	*matrix;
 
 	if (!rows || !cols ||
-		!(matrix = malloc(sizeof(t_matrix))) ||
-		!(matrix->values = (ld **)malloc(sizeof(ld *) * rows)))
+			!(matrix = malloc(sizeof(t_matrix))) ||
+			!(matrix->values = (ld **)malloc(sizeof(ld *) * rows)))
 		return (NULL);
 	matrix->rows = rows;
 	matrix->cols = cols;
@@ -80,14 +80,18 @@ t_matrix	*scale_matrix(t_matrix *a, long double scale, int flag)
 	return (scaled);
 }
 
-t_matrix	*multiply_matrix(t_matrix *a, t_matrix *b, int flag)
+t_matrix	*multiply_matrix(t_matrix *a, t_matrix *b)
 {
-	if (!a || !b || a->rows != b->cols)
+	t_matrix *product;
+
+	if (!a || !b || a->rows != b->cols ||
+			!(product = create_matrix(a->rows, b->cols, NOTSET)))
 		return (NULL);
-	if (flag & COMP)
-		return (multiply_matrix_composition(a, b));
-	else if (flag & )
-	
+	for (int i = 0; i < a->rows; i++)
+		for (int j = 0; j < b->cols; j++)
+			for (int k = 0; k < a->cols; k++)
+				product[i][j] += a[i][k] * b[k][j];
+	return (product);
 }
 
 t_matrix	*append_matrix(t_matrix *a, t_matrix *b, int flag)
@@ -113,4 +117,28 @@ t_matrix	*append_matrix(t_matrix *a, t_matrix *b, int flag)
 		}
 	}
 	return (appended);
+}
+
+t_matrix	*matrix_partition(t_matrix *a, size_t rl, size_t rr, size_t cl, size_t cr)
+{
+	t_matrix *partition;
+
+	if (!a || rl > a->rows || rr > a->rows || cl > a->cols || cr > a->cols ||
+			|| rl > rr || cl > cr ||
+			!(partition = create_matrix(rr - rl + 1, cr - cl + 1, NOTSET)))
+		return (NULL);
+	for (int i = rl; i <= rr; i++)
+		for (int j = cl; j <= cr; j++)
+			partition->values[i = rl][j - cl] = a->values[i][j];
+	return (partition);
+}
+
+t_matrix	*matrix_row(t_matrix *a, size_t r)
+{
+	return (matrix_partition(a, r, r, 0, a ? a->cols : 69));
+}
+
+t_matrix	*matrix_col(t_matrix *a, size_t c)
+{
+	return (matrix_partition(a, 0, a ? a->rows : 69, c, c));
 }

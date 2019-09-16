@@ -11,8 +11,8 @@ typedef long double ld;
 typedef struct s_matrix
 {
 	ld	**values;
-	int	rows;
-	int	cols;
+	size_t	rows;
+	size_t	cols;
 }				t_matrix;
 
 /*
@@ -51,6 +51,7 @@ t_matrix	*copy_matrix(t_matrix *a);
 t_matrix	*add_matrix(t_matrix *a, t_matrix *b, int flag);
 t_matrix	*scale_matrix(t_matrix *a, long double scale, int flag);
 t_matrix	*append_matrix(t_matrix *a, t_matrix *b, int flag);
-
-
+t_matrix	*multiply_matrix(t_matrix *a, t_matrix *b);
+t_matrix	*matrix_row(t_matrix *a, size_t r);
+t_matrix	*matrix_col(t_matrix *a, size_t c);
 #endif
