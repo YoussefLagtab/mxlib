@@ -142,3 +142,15 @@ t_matrix	*matrix_col(t_matrix *a, size_t c)
 {
 	return (matrix_partition(a, 0, a ? a->rows : 69, c, c));
 }
+
+t_matrix	*matrix_tanspose(t_matrix *a)
+{
+	t_matrix *transpose;
+
+	if (!a || (transpose = create_matrix(a->cols, a->rows, NOTSET)))
+		return (NULL);
+	for (int i = 0; i < a->cols; i++)
+		for (int j = 0; j < a->rows; j++)
+			transpose->values[i][j] = a->values[j][i];
+	return (transpose);
+}
